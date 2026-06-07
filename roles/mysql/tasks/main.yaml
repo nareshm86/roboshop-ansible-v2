@@ -1,0 +1,11 @@
+ - name: install mysql server
+   package:
+      name: mysql-server
+      state: present
+ - name: enable and start mysql server
+   service:
+      name: mysqld
+      state: started
+      enabled: yes
+ - name: set root password
+   command: mysql_secure_installation --set-root-pass RoboShop@1
