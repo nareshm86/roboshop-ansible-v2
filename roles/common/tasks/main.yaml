@@ -1,3 +1,5 @@
 - name: demon on common role
   debug:
     msg: "Iam loading this from common role"
+  import_role:
+    name: demo
