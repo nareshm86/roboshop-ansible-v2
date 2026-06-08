@@ -1,0 +1,84 @@
+  - name: enabled node js 20
+    command: dnf module enable nodejs:20 -y
+  - name: install node js 20
+    package:
+      name: nodejs
+      state: present
+  - name: create roboshop user
+    user:
+     name: roboshop
+     system: true
+     home: /app
+     shell: /sbin/nologin
+     create_home: false
+     comment: "Roboshop System user"
+  - name: remove app directory
+    file:
+      path: /app
+      state: absent
+  - name: delete catalogue.zip in tmp directory
+    file:
+      path: /tmp/catalogue.zip
+      state: absent
+
+  - name: create app directory
+    file:
+      path: /app
+      state: directory
+  - name: download catalogue service code
+    get_url:
+     url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+     dest: /tmp/catalogue.zip
+
+  - name: unzip catalogue file
+    unarchive:
+       src: /tmp/catalogue.zip
+       dest: /app
+       remote_src: yes
+
+  - name: install npm dependencies
+    community.general.npm:
+     path: /app
+     state: present
+
+  - name: copy catalogue service
+    template:
+      src: catalogue.service.j2
+      dest: /etc/systemd/system/catalogue.service
+    tags: cataloguej2
+
+  - name: cp mongo repo
+    copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  
+  - name: install mongodb client
+    package:
+      name: mongodb-mongosh
+      state: present
+
+  - name: check catalogue schema exist ot not
+    shell: mongosh --host "{{ MONGODB_HOST }}" --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    register: catalogue_output
+   
+  - name: print catalogue_output
+    debug: 
+      msg: "{{ catalogue_output }}"
+  
+  - name: load products
+    shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
+    when: catalogue_output.stdout | int < 0
+
+  - name: daemon reload
+    systemd_service:
+      name: catalogue
+      daemon_reload: true
+    tags: dreload
+
+  - name: service restart
+    service:
+     name: catalogue
+     state: restarted
+     enabled: yes
+    
