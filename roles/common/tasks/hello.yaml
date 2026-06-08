@@ -1,0 +1,3 @@
+- name: Hello on common role
+  debug:
+    msg: "Hello from hello.yaml"
