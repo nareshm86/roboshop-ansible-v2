@@ -3,6 +3,6 @@
     msg: "Hi, I am from Demo role tasks"
 - name: import common role
   import_role:
-  - name: common
-    
+    name: common
+
 
