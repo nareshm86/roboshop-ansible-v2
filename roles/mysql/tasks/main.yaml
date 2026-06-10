@@ -1,6 +1,6 @@
  - name: get the password from AWS Secret Manager
    debug:
-    msg: "{{ lookup('amazon.aws.aws_ssm', '/roboshop/mysql/password', region='us-east-1') }}"
+    msg: "{{ lookup('amazon.aws.aws_ssm', '/roboshop/mysql/password', region='us-east-1') from json }}"
  - name: install mysql server
    package:
       name: mysql-server
