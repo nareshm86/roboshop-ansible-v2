@@ -1,7 +1,7 @@
 ansible_user: ec2-user
 ansible_password: DevOps321
 #mysql_root_password: RoboShop@1
-mysql_root_password="{{ lookup('amazon.aws.aws_secret', 'roboshop/mysql_root_password', region='us-east-1) }}"
+#mysql_root_password="{{ lookup('amazon.aws.aws_secret', 'roboshop/mysql_root_password', region='us-east-1) }}"
 MONGODB_HOST: mongodb.nmarriaws.xyz
 REDIS_HOST: redis.nmarriaws.xyz
 CATALOGUE_HOST: catalogue.nmarriaws.xyz
