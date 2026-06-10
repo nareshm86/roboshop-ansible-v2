@@ -1,1 +1,1 @@
-mysql_root_password="{{ lookup('amazon.aws.aws_ssm', '/roboshop/mysql/password', region='us-east-1') from json }}"
+mysql_root_password: "{{ lookup('amazon.aws.aws_ssm', '/roboshop/mysql/password', region='us-east-1') from json }}"
