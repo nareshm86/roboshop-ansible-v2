@@ -1,5 +1,5 @@
 - name: installation of nginx
-  hosts: Application node
+  hosts: Applicationnode
   become: yes
   tasks:
   - name: install nginx service
