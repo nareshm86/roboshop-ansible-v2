@@ -2,7 +2,7 @@
   hosts: Application node
   become: yes
   tasks:
-- name: install nginx service
-  package:
-    name: nginx
-    state: present
+  - name: install nginx service
+    package:
+      name: nginx
+      state: present
